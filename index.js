@@ -28,6 +28,10 @@ app.get('/api/notes', (req,res) => {
     res.json(notes) 
  });
 
+ app.post('/api/addnote', (req,res) => {
+    res.status(201).json({messsage:"note created successfully"}) 
+ }); 
+ 
 const PORT = 3001;
 app.listen(PORT , () =>{
     console.log(`server running on port ${PORT}`);
