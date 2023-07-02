@@ -1,0 +1,8 @@
+PUT http://192.168.0.103:3001/api/persons/5
+Content-Type: application/json
+
+{
+    "id":5,
+    "name":"Nishant",
+    "number":"34-56-235246"
+}
