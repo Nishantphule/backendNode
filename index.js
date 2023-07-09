@@ -37,7 +37,7 @@ app.post('/api/notes', (request, response) => {
 
 // fetching a sigle resource
 app.get('/api/notes/:id', (request, response) => {
-    const id = request.params.id;
+    const id = Number(request.params.id);
     Note.findById(id)
         .then((note) => {
             if (!note) {
