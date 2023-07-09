@@ -11,9 +11,9 @@ const Note = require('./models/notes');
 // set the endpoints
 
 // root end point: prints hello world as an HTML
-// app.get('/', (request, response) => {
-//     response.send('<h1>Hello World!</h1>');
-// });
+app.get('/', (request, response) => {
+    response.send('<h1>Hello World!</h1>');
+});
 
 // fetches all resources in the collection
 app.get('/api/notes', (request, response) => {
