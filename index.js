@@ -26,6 +26,7 @@ mongoose.connect(config.MONGO_URL)
 
 // set the endpoints
 const notesRouter = require('./controllers/notes');
+const usersRouter = require('./controllers/users');
 
 // root end point: prints hello world as an HTML
 app.get('/', (request, response) => {
@@ -34,6 +35,7 @@ app.get('/', (request, response) => {
 
 // fetches all resources in the collection
 app.use('/api/notes', notesRouter);
+app.use('/api/users', usersRouter);
 
 // middle ware
 app.use(cors());

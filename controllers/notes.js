@@ -28,7 +28,6 @@ notesRouter.get('/:id', (request, response, next) => {
 // creates a new resource based on the request data
 notesRouter.post('/', (request, response) => {
     const note = new Note(request.body);
-    console.log(request.body)
     note.save()
         .then((savedNote) => {
             response.status(201).json({ message: 'Note created successfully', note: savedNote });
