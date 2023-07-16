@@ -7,6 +7,9 @@ const middleware = require('./utils/middleware');
 
 // create an express app
 const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(middleware.requestLogger);
 
 // set the strictQuery to false, so that it will disable the strict mode for the query filters
 // mongoose will not throw any error when we use an undefined field in the query (ignored)
@@ -36,9 +39,6 @@ app.get('/', (request, response) => {
 app.use('/api/notes', notesRouter);
 
 // middle ware
-app.use(cors());
-app.use(express.json());
-app.use(middleware.requestLogger);
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler);
 
