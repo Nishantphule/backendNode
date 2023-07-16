@@ -111,3 +111,10 @@ const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
 });
+
+
+{
+    "name": "Nishant",
+    "username": "Nish1234",
+    "password": "Nish@123"
+}
