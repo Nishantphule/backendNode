@@ -1,5 +1,6 @@
 // import the express Router
 const notesRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
 
 // import the model
 const Note = require('../models/note');
@@ -7,7 +8,7 @@ const User = require('../models/user');
 
 // endpoint to get all the notes
 notesRouter.get('/', async (request, response) => {
-    await Note.find({}, {}).populate('user', {username:1})
+    await Note.find({}, {}).populate('user', { username: 1 })
         .then((notes) => {
             response.json(notes);
         });
@@ -27,15 +28,30 @@ notesRouter.get('/:id', (request, response, next) => {
 });
 
 // creates a new resource based on the request data
-notesRouter.post('/', async (request, response) => {
+notesRouter.post('/', async (request, response, next) => {
     const body = request.body;
 
-    const user = await User.findById(body.userId);
+    const getTokenFrom = (request) => {
+        let authorization = request.get('Authorization');
+        if (authorization && authorization.startsWith('bearer ')) {
+            return authorization.replace('bearer ', '');
+        }
+        return null;
+    }
+
+    // verify the token
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
+
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: "token invalid" })
+    }
+
+    const user = await User.findById(decodedToken.id);
 
     const note = new Note({
         content: body.content,
         important: body.important,
-        user: user.id
+        user: user._id
     });
 
     const savedNote = await note.save();

@@ -11,7 +11,7 @@ const requestLogger = (request, response, next) => {
 
 // middleware for catching requests that are made to non-existent routes
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({error: 'unknown endpoint'});
+    response.status(404).send({ error: 'unknown endpoint' });
 }
 
 // Express error handlers - middleware
@@ -19,8 +19,17 @@ const unknownEndpoint = (request, response) => {
 const errorHandler = (error, request, response, next) => {
     console.error(error.message);
 
-    if(error.name === 'CastError'){
-        return response.status(400).send({error: 'malformatted id'});
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' });
+    }
+    else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message });
+    }
+    else if (error.name === 'JsonWebTokenError') {
+        return response.status(401).json({ error: "Invalid token" });
+    }
+    else if (error.name === 'TokenExpiredError') {
+        return response.status(401).json({ error: "Token expired" });
     }
 
     next(error);
