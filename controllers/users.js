@@ -1,15 +1,14 @@
 // import the express Router
 const usersRouter = require('express').Router();
+const bcrypt = require('bcrypt');
 
 // import the model
 const User = require('../models/user');
 
 // endpoint to get all the users
-usersRouter.get('/', (request, response) => {
-    User.find({}, {})
-    .then((users) => {
-        response.json(users);
-    });
+usersRouter.get('/', async (request, response) => {
+    const users = await User.find({}, {})
+    response.json(users);
 });
 
 // fetches a single resource
@@ -26,12 +25,21 @@ usersRouter.get('/:id', (request, response, next) => {
 });
 
 // creates a new resource based on the request data
-usersRouter.post('/', (request, response) => {
-    const user = new User(request.body);
-    user.save()
-        .then((saveduser) => {
-            response.status(201).json({ message: 'user created successfully', user: saveduser });
-        })
+usersRouter.post('/', async (request, response) => {
+    const { username, name, password } = request.body;
+
+    const saltRounds = 10;
+    const passHash = await bcrypt.hash(password, saltRounds);
+
+    const user = new User({
+        username: username,
+        name: name,
+        passwordHash: passHash
+    })
+
+    const savedUser = await user.save()
+    response.status(201).json({ message: 'user created successfully', user: savedUser });
+
 });
 
 // deletes a single resource
